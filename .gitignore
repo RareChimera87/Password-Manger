@@ -30,7 +30,7 @@ build/
 .settings/
 
 # VS Code (ignora configuraciones locales)
-.vscode/
+
 
 # --- Otros ---
 
