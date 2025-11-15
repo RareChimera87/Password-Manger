@@ -1,1 +1,45 @@
 .directory
+# Ignorar archivos compilados de Java
+*.class
+
+# Ignorar archivos de paquete (JARs, WARs, etc.)
+*.jar
+*.war
+*.ear
+
+# --- Build Tools ---
+
+# Maven
+target/
+
+# Gradle
+build/
+.gradle/
+
+# --- IDEs ---
+
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# VS Code (ignora configuraciones locales)
+.vscode/
+
+# --- Otros ---
+
+# Archivos de log
+*.log
+
+# Archivos temporales
+*.tmp
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
