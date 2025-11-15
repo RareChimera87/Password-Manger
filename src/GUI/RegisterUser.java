@@ -1,46 +1,93 @@
 package GUI;
 
-import java.util.List;
-import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.util.Arrays;
 
-import Model.User;
+import Control.ControlUser;
 
-import java.time.LocalDateTime;
 
-import DAO.userDAO;
+public class RegisterUser extends JFrame {
 
-public class RegisterUser {
-    static void main() throws Exception {
-        User usuario;
-        userDAO userDAO = new userDAO();
+    private JTextField txtUserName;
+    private JPasswordField txtPass;
 
-        System.out.println("Registrar Usuario");
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Nombre de Usuario");
-        String username = sc.nextLine();
-        System.out.println("Password de Usuario");
-        String password = sc.nextLine();
-        LocalDateTime creaated_at = LocalDateTime.now();
+    private ControlUser controlUser;
 
-        usuario = new User(username, password, "algomasgisdsa", creaated_at);
+    public RegisterUser(ControlUser controlUser) {
+        super("Register User");
+        this.controlUser = controlUser;
 
-        userDAO.insert(usuario);
+        setSize(400, 600);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
 
-        List<User> usuarios = userDAO.getAllUsers();
-        for (User user : usuarios) {
-            System.out.println(user.getId());
-            System.out.println(user.getUsername());
-            System.out.println(user.getPasswordHash());
-            System.out.println(user.getSalt());
-            System.out.println(user.getCreatedAt());
-        }
-        User prueba = userDAO.getUserById(2);
+        JLabel title = new JLabel("Register User", SwingConstants.CENTER);
+        title.setFont(new Font("Arial", Font.BOLD, 24));
+        title.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
+        add(title, BorderLayout.NORTH);
 
-        System.out.println(prueba.getId());
-        System.out.println(prueba.getUsername());
-        System.out.println(prueba.getPasswordHash());
-        System.out.println(prueba.getSalt());
-        System.out.println(prueba.getCreatedAt());
+        JPanel panelFormulario = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 10, 5, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panelFormulario.add(new JLabel("Username:"), gbc);
+
+        gbc.gridx = 1;
+        txtUserName = new JTextField(20);
+        panelFormulario.add(txtUserName, gbc);
+
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panelFormulario.add(new JLabel("Password:"), gbc);
+
+        gbc.gridx = 1;
+        txtPass = new JPasswordField(20);
+        panelFormulario.add(txtPass, gbc);
+
+
+
+        add(panelFormulario, BorderLayout.CENTER);
+
+        JPanel panelButtons = new JPanel();
+        panelButtons.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+        JButton btnSave = new JButton("Save");
+        btnSave.setPreferredSize(new Dimension(150, 35));
+        btnSave.addActionListener(e -> saveUser());
+
+        panelButtons.add(btnSave);
+        add(panelButtons, BorderLayout.SOUTH);
+
+        setVisible(true);
 
     }
+
+    private void saveUser() {
+        try {
+            String Username = txtUserName.getText().trim().toLowerCase();
+            char[] PasswordCharts = txtPass.getPassword();
+            String Password = new String(PasswordCharts);
+
+            if (Username.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Username is empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (Password.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Password is empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            System.out.println(Password);
+            controlUser.RegisterUser(Username, Password);
+            JOptionPane.showMessageDialog(this, "Usuario registrado");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+
 }

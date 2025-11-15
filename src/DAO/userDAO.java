@@ -30,6 +30,7 @@ public class userDAO {
         }
 
     }
+
     public List<User> getAllUsers() throws Exception {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM users";
@@ -50,6 +51,7 @@ public class userDAO {
 
         return users;
     }
+
     public User getUserById(int id) throws Exception {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM users where id = ?";
@@ -71,5 +73,18 @@ public class userDAO {
 
         }
         return null;
+    }
+
+    public void delete(int id) throws SQLException {
+        String sql = "DELETE FROM users WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection(Config.DB_PATH);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
