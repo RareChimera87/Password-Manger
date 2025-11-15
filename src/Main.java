@@ -1,4 +1,4 @@
-import Model.DatabaseConnection;
+import config.DatabaseConnection;
 import config.Config;
 
 public class Main {
