@@ -3,25 +3,28 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 
-import Control.ControlUser;
+import Control.ControlCredentials;
+import Model.User;
 
 
-public class RegisterUser extends JFrame {
+public class RegisterService extends JFrame {
 
-    private JTextField txtUserName;
+    private JTextField txtUserName, txtServiceName;
+    private JTextArea txtNotas;
     private JPasswordField txtPass;
+    private User user;
 
-    private ControlUser controlUser;
+    private ControlCredentials controlCredentials;
 
-    public RegisterUser(ControlUser controlUser) {
-        super("Register User");
-        this.controlUser = controlUser;
+    public RegisterService(User usuario, ControlCredentials controlCredentials) {
+        super("Register Service");
+        this.controlCredentials = controlCredentials;
+        this.user = usuario;
 
         setSize(400, 600);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-
-        JLabel title = new JLabel("Register User", SwingConstants.CENTER);
+        JLabel title = new JLabel("Register Service", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 24));
         title.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
         add(title, BorderLayout.NORTH);
@@ -34,6 +37,14 @@ public class RegisterUser extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
+        panelFormulario.add(new JLabel("Service Name:"), gbc);
+
+        gbc.gridx = 1;
+        txtServiceName = new JTextField(20);
+        panelFormulario.add(txtServiceName, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         panelFormulario.add(new JLabel("Username:"), gbc);
 
         gbc.gridx = 1;
@@ -42,12 +53,20 @@ public class RegisterUser extends JFrame {
 
 
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         panelFormulario.add(new JLabel("Password:"), gbc);
 
         gbc.gridx = 1;
         txtPass = new JPasswordField(20);
         panelFormulario.add(txtPass, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        panelFormulario.add(new JLabel("Notas:"), gbc);
+
+        gbc.gridx = 1;
+        txtNotas = new JTextArea(15,15);
+        panelFormulario.add(txtNotas, gbc);
 
 
 
@@ -70,10 +89,15 @@ public class RegisterUser extends JFrame {
     private void saveUser() {
         try {
             String Username = txtUserName.getText().trim().toLowerCase();
+            String ServiceName = txtServiceName.getText().trim().toLowerCase();
+            String Notas = txtNotas.getText().trim().toLowerCase();
             char[] PasswordCharts = txtPass.getPassword();
             String Password = new String(PasswordCharts);
 
-            if (Username.isEmpty()) {
+            if (ServiceName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Username is empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }if (Username.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Username is empty!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -82,8 +106,9 @@ public class RegisterUser extends JFrame {
                 return;
             }
             System.out.println(Password);
-            controlUser.RegisterUser(Username, Password);
-            JOptionPane.showMessageDialog(this, "Usuario registrado");
+            //controlUser.RegisterUser(Username, Password);
+            controlCredentials.RegisteCredentia(user.getId(),ServiceName, Username, Password, Notas);
+            JOptionPane.showMessageDialog(this, "Servicio registrado");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }

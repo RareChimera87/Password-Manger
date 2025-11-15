@@ -1,4 +1,4 @@
-import GUI.RegisterUser;
+import GUI.MainMenu;
 import config.DatabaseConnection;
 import config.Config;
 import Control.ControlUser;
@@ -10,7 +10,7 @@ public class Main {
 
         if(DatabaseConnection.genDB(file_route)){
             DatabaseConnection.initilizeDB(file_route);
-            new RegisterUser(controlUser);
+            new MainMenu();
 
         } else{
             System.out.println("ERROR: Database not found");

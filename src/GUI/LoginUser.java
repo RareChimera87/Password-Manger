@@ -4,24 +4,25 @@ import javax.swing.*;
 import java.awt.*;
 
 import Control.ControlUser;
+import Model.User;
 
 
-public class RegisterUser extends JFrame {
+public class LoginUser extends JFrame {
 
     private JTextField txtUserName;
     private JPasswordField txtPass;
 
     private ControlUser controlUser;
 
-    public RegisterUser(ControlUser controlUser) {
-        super("Register User");
+    public LoginUser(ControlUser controlUser) {
+        super("Login User");
         this.controlUser = controlUser;
 
         setSize(400, 600);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        JLabel title = new JLabel("Register User", SwingConstants.CENTER);
+        JLabel title = new JLabel("Login", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 24));
         title.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
         add(title, BorderLayout.NORTH);
@@ -56,9 +57,9 @@ public class RegisterUser extends JFrame {
         JPanel panelButtons = new JPanel();
         panelButtons.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
-        JButton btnSave = new JButton("Save");
+        JButton btnSave = new JButton("go");
         btnSave.setPreferredSize(new Dimension(150, 35));
-        btnSave.addActionListener(e -> saveUser());
+        btnSave.addActionListener(e -> loginUser());
 
         panelButtons.add(btnSave);
         add(panelButtons, BorderLayout.SOUTH);
@@ -67,7 +68,7 @@ public class RegisterUser extends JFrame {
 
     }
 
-    private void saveUser() {
+    private void loginUser() {
         try {
             String Username = txtUserName.getText().trim().toLowerCase();
             char[] PasswordCharts = txtPass.getPassword();
@@ -82,8 +83,14 @@ public class RegisterUser extends JFrame {
                 return;
             }
             System.out.println(Password);
-            controlUser.RegisterUser(Username, Password);
-            JOptionPane.showMessageDialog(this, "Usuario registrado");
+            User usua = controlUser.loginUser(Username, Password);
+            if(usua != null){
+                JOptionPane.showMessageDialog(this, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                new UserMenu(usua);
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "Login Failed! User not find or invalid", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }

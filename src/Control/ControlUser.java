@@ -41,6 +41,29 @@ public class ControlUser {
         }
     }
 
+    public User loginUser(String username, String password) {
+        try {
+            User user = GetUserByUsername(username);
+            if (user == null) {
+                return null;
+            }
+
+            byte[] salt = StringToByte(user.getSalt());
+            byte[] attempted_pass_bytes = PasswordHasher.hashPassword(password, salt);
+
+            String attempted_pass = ByteToString(attempted_pass_bytes);
+
+            boolean password_match = attempted_pass.equals(user.getPasswordHash());
+
+            if( password_match){
+                return user;
+            }return null;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public List<User> GetAllUsers() {
         try {
             userDAO = new userDAO();
@@ -69,6 +92,26 @@ public class ControlUser {
             System.out.println(usuario.getSalt());
             System.out.println(usuario.getCreatedAt());
             return usuario;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public User GetUserByUsername(String username) {
+        try {
+            userDAO = new userDAO();
+            User usuario = userDAO.getUserByUsername(username);
+            if (usuario != null) {
+                System.out.println(usuario.getId());
+                System.out.println(usuario.getUsername());
+                System.out.println(usuario.getPasswordHash());
+                System.out.println(usuario.getSalt());
+                System.out.println(usuario.getCreatedAt());
+                return usuario;
+            } else  {
+                return null;
+            }
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

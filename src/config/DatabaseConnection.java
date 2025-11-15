@@ -63,18 +63,19 @@ public class DatabaseConnection {
 
            // Tabla de contraseñas
            stmt.execute("""
-                CREATE TABLE IF NOT EXISTS password_entries (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    service_name TEXT NOT NULL,
-                    username TEXT NOT NULL,
-                    password_encrypted TEXT NOT NULL,
-                    notes_encrypted TEXT,
-                    created_at TEXT NOT NULL,
-                    updated_at TEXT NOT NULL,
-                    user_id INTEGER,
-                    FOREIGN KEY (user_id) REFERENCES users(id)
-                );
-            """);
+                       CREATE TABLE IF NOT EXISTS credentials (
+                           id INTEGER PRIMARY KEY AUTOINCREMENT,
+                           user_id INTEGER,
+                           service_name TEXT NOT NULL,
+                           username TEXT NOT NULL,
+                           salt TEXT NOT NULL,
+                           password_encrypted TEXT NOT NULL,
+                           notes_encrypted TEXT,
+                           created_at TEXT NOT NULL,
+                           updated_at TEXT NOT NULL,
+                           FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                       );
+                   """);
 
            System.out.println("Base de datos inicializada correctamente.");
        } catch (Exception e){

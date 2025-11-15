@@ -1,14 +1,17 @@
 package GUI;
 
+import Control.ControlCredentials;
 import Control.ControlUser;
+import Model.User;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class MainMenu extends JFrame {
-    public MainMenu() {
+public class UserMenu extends JFrame {
+    public UserMenu(User u) {
         super("Password Management System");
         ControlUser controlUser = new ControlUser();
+        ControlCredentials controlCredentials = new ControlCredentials();
 
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -34,11 +37,11 @@ public class MainMenu extends JFrame {
         Dimension tamañoBoton = new Dimension(300, 45);
         gbc.insets = new Insets(8, 0, 8, 0);
 
-        JButton btnLogin = crearBoton("Login", tamañoBoton);
+        JButton btnServices = crearBoton("Ver Servicio registrados", tamañoBoton);
         gbc.gridy = 1;
-        panelCentral.add(btnLogin, gbc);
+        panelCentral.add(btnServices, gbc);
 
-        JButton btnRegister = crearBoton("Register", tamañoBoton);
+        JButton btnRegister = crearBoton("Registrar Servicios", tamañoBoton);
         gbc.gridy = 2;
         panelCentral.add(btnRegister, gbc);
 
@@ -51,14 +54,15 @@ public class MainMenu extends JFrame {
 
         add(panelCentral, BorderLayout.CENTER);
 
-        btnLogin.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Abriendo formulario de registro...");
-            new LoginUser(controlUser);
+        btnServices.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Abriendo registro...");
+            new Services(controlCredentials, u);
+
         });
 
         btnRegister.addActionListener(e -> {
             JOptionPane.showMessageDialog(this, "Abriendo formulario de registro...");
-            new RegisterUser(controlUser);
+            new RegisterService(u, controlCredentials);
         });
 
         btnSalir.addActionListener(e -> {

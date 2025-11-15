@@ -75,6 +75,29 @@ public class userDAO {
         return null;
     }
 
+    public User getUserByUsername(String username) throws Exception {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM users where  username = ?";
+        try (Connection conn = DatabaseConnection.getConnection(Config.DB_PATH);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, username);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    User u = new User("", "", "", java.time.LocalDateTime.now());
+                    u.setId(rs.getInt("id"));
+                    u.setUsername(rs.getString("username"));
+                    u.setPasswordHash(rs.getString("password_hash"));
+                    u.setSAlt(rs.getString("salt"));
+                    u.setCreatedAt(java.time.LocalDateTime.parse(rs.getString("created_at")));
+                    return u;
+                }
+            }
+
+        }
+        return null;
+    }
+
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM users WHERE id = ?";
 
